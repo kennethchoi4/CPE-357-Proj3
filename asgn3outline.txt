@@ -1,0 +1,154 @@
+
+
+1. Program Requirements:
+
+This program, smake, will mimic the functionality and error handling that
+make does. Checking if the file is in the correct format, it will link dependencies
+targets and the entire program together. Any files or dependencies that article
+not up to date will be updated accordingly within this framework.
+
+2. Datastructure Definitions:
+
+Tree - Used to hold the order of dependencies to targets.
+    Each "node" of the tree will have information such as where each of its dependencies are and a ptr to those "nodes" its "name" and what "type" it is.
+    "Nodes" will also hold, below the tab, what actions are going to be called. There will also be a flag for update which will let it know if it is update.
+
+    struct tnode {
+        char *name;
+        enum TYPE;
+        int updated; /* be recursed all the way down to leaf nodes to see if any dependency has to be updated */
+        char* dependencies[]; /* Adjacency list */
+        char* actions[]; /* 
+    };
+
+
+    For example:
+
+                Main            The target - Executable
+            /    |     \
+        one.o   two.o  three   The dependencies
+        |
+        one.c   two.c           The files
+
+3. Function Prototypes:
+
+FILE *openMake(char*, char*);
+struct tnode* createTree(FILE*);
+struct tnode *createTnode(char*[], char*[], char*);
+struct tnode *talloc(size_t size);
+void executeActions(struct tnode*);
+
+4. Pseudocode for Main:
+
+int main(int argc, char* argv[]) {
+    FILE* make = openMake;
+    root = createTree(make);
+    if !root
+        empty
+    iter thru tree 
+        if node !updated
+            executeActions()
+        else
+            continue iter until mapped.
+    return 0;
+}
+
+5. Pseudocode for each Function
+
+FILE *openMake(char*, char*){
+    safely open file;
+
+    if failure    
+        if permissions locked for file
+            perror("message")
+            exit(-1)
+        if not exist
+            perror("message")
+            exit(-1)
+            
+    else
+        return file ptr;
+}
+
+struct tnode* createTree(FILE* file) {
+    
+    while (not EOF) {
+        char* temp;
+        while ((temp = getline(FILE*)) != EOF or empty line) {
+            if no colon after target
+                message
+                error
+            if (target) 
+                save target name 
+                collect dependency strings in list for node.
+            else
+                if !tab
+                    message 
+                    error
+                else    
+                    collect actions in action list for node
+
+        }
+
+        if first node 
+            save to root *tnode;
+            root = createTnode(actions[], dependencies[], targetName);
+        else {
+            node = createTnode(actions[], dependencies[], targetName);
+        }
+    }
+    if (!root)
+        return NULL;
+    return root;
+}
+
+
+struct tnode *createTnode(actions[], dependencies[], targetName) {
+
+    if !(targetName) {
+        return NULL;
+    }
+
+    else {
+        actionSize = get size of actions[];
+        depSize = get size of dependecies[];
+        targetNameSize = sizeof(targetName);
+        size = all rest of declared data sizes added;
+        struct tnode* node = talloc(size);
+
+        copy info into node;
+
+        return node;
+    }
+
+}
+
+struct tnode *talloc(size) {
+    struct* node = safeMalloc(size);
+    return node;
+}
+
+void executeActions(action[]) {
+    while more actions to execute{
+        if action[i] !valid
+            error message
+            exit
+        execute action[i];
+    }
+    return;
+}
+
+
+
+
+6. Test Strategy and corner case defined
+
+Good Strats:
+    -   Create a data structure outside of assignment and test
+    -   Additional ease in the data structure for organization of make data
+
+Edge Cases:
+    -   Poorly Written Make files must be handled
+    -   Invalid actions must be errors
+    -   Bad datastructure paths such as undefined dependecies
+
